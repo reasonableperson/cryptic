@@ -25,3 +25,6 @@ window.cell = cell # TODO remove
 cell = (row, col) -> $('#crossword td[data-row="'+row+'"][data-col="'+col+'"]')
 $.fn.down = -> cell(@.data('row') + 1, @.data('col'))
 $.fn.across = -> cell(@.data('row'), @.data('col') + 1)
+
+# toggle black/white on click (for now)
+$('#crossword').on('click', 'td', -> $(@).toggleClass('black'))
