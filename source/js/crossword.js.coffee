@@ -12,7 +12,7 @@ PUZZLE = puzzleGen(10,10)
 makeCell = (letter, row, col) ->
     td = "<td data-row='" + row + "' data-col='" + col + "'"
     if letter == '@' then td += " class='black'"
-    td + letter + '</td>'
+    td + '>' + letter + '</td>'
 makeRow = (letterList, row) -> '<tr>' + (makeCell(l, row, col) for l, col in letterList).join('') + '</tr>'
 
 # draw the crossword
@@ -21,10 +21,31 @@ table = $('<table id="crossword"><tbody>' + tableStr + '</tbody></table>')
 $('#crossword').replaceWith(table)
 
 # help us navigate the crossword
-window.cell = cell # TODO remove
-cell = (row, col) -> $('#crossword td[data-row="'+row+'"][data-col="'+col+'"]')
-$.fn.down = -> cell(@.data('row') + 1, @.data('col'))
-$.fn.across = -> cell(@.data('row'), @.data('col') + 1)
+$.fn.isInvalid = -> @.length == 0 || @.hasClass('black')
+cell = (row, col) ->
+    result = $('#crossword td[data-row="'+row+'"][data-col="'+col+'"]')
+    if (result.isInvalid()) then false
+    else result
+$.cell = cell # TODO remove
+
+$.fn.move = (r, c) -> cell(@.data('row') + r, @.data('col') + c)
+$.fn.up = -> @.move(-1, 0)
+$.fn.down = -> @.move(1, 0)
+$.fn.left = -> @.move(0,-1)
+$.fn.right = -> @.move(0,1)
 
 # toggle black/white on click (for now)
 $('#crossword').on('click', 'td', -> $(@).toggleClass('black'))
+
+getsNumber = ->
+    me = $(@)
+    if (me.isInvalid()) then throw "this shouldn't happen" 
+    if (me.down() && !me.up() || me.right() && !me.left()) then true
+    else false
+
+$('#crossword td:not(.black)').filter(getsNumber).each( (i, el) ->
+    $('<span class="num">').text(parseInt(i) + 1).appendTo(el)
+)
+
+
+
