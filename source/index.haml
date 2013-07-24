@@ -1,5 +1,18 @@
 ---
 title: crossword example
 ---
-%h1 crossword example
-#crossword Loading crossword...
+
+.row-fluid
+    .span12
+        %h1 example
+
+.row-fluid
+    .span8
+        #crossword Choose an option below...
+    .span4
+        %h4 Load data
+        %button#random.btn Random grid
+        %button#ajaxLoad.btn AJAX sample.json
+        %button#localLoad.btn Local storage
+        %h4 Save data
+        %button#localSave.btn Save to local storage
