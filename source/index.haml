@@ -8,7 +8,11 @@ title: crossword example
 
 .row-fluid
     .span8
-        #crossword Choose an option below...
+        %table#crossword
+            %tbody
+                %tr
+                    %td{ :style => "width: 500px;" }
+                        Load a puzzle using the options on the right.
     .span4
         %h4 Load data
         %button#random.btn Random grid
@@ -16,3 +20,5 @@ title: crossword example
         %button#localLoad.btn Local storage
         %h4 Save data
         %button#localSave.btn Save to local storage
+        %h4 Edit puzzle
+        #button#toggleCells.btn Toggle black cells

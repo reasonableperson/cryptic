@@ -15,5 +15,6 @@ table#crossword {
     }
     .black {background: black;}
 }
+#crossword.toggleCells td {cursor: pointer;}
 
 #controls {text-align: center;}
