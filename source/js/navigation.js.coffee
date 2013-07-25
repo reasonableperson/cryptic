@@ -13,8 +13,6 @@ getsNumber = ->
     if (me.down() && !me.up() || me.right() && !me.left()) then true
     else false
 
-$('#crossword td:not(.black)').filter(getsNumber).each( (i, el) ->
+$('#crossword td:not(.black)').filter(getsNumber).each (i, el) ->
     console.log('filtered', @)
     $('<span class="num">').text(parseInt(i) + 1).appendTo(el)
-)
-
