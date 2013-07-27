@@ -5,8 +5,6 @@ restify = require('restify')
 server = restify.createServer()
 server.use restify.bodyParser()
 server.use restify.fullResponse()
-#server.use (req, res, next) ->
-#    next()
 
 # initialise database  
 redis = require('redis')
@@ -17,9 +15,17 @@ crypto = require('crypto')
 cryptical.hash = (str) ->
     crypto.createHash('sha1').update(str).digest('hex')
 
-# define routes
-server.get '/hi', (request, response, next) ->
-    response.send('hey')
+# templates
+haml = require('haml')
+fs = require('fs')
+server.get '/', (request, response, next) ->
+    template = fs.readFileSync('template.haml').toString().split('\n')
+    html = haml.render template,
+        contents: 'abc'
+    response.writeHead 200,
+      'Content-Length': Buffer.byteLength(html),
+      'Content-Type': 'text/html'
+    response.write(html).end()
     next()
 
 server.get '/game/load/:hash', (request, response, next) ->
@@ -29,7 +35,7 @@ server.get '/game/load/:hash', (request, response, next) ->
         next()
 
 server.get '/game/save', (req, res, next) ->
-    res.send 'fuck you'
+    res.send 'GET not supported'
     
 server.post '/game/save', (req, res, next) ->
     res.header "Access-Control-Allow-Origin", "http://localhost:7793"
