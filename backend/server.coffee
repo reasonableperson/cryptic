@@ -1,11 +1,21 @@
+cryptical = {}
+
 # initialise server
 restify = require('restify')
 server = restify.createServer()
-server.use(restify.bodyParser())
+server.use restify.bodyParser()
+server.use restify.fullResponse()
+#server.use (req, res, next) ->
+#    next()
 
 # initialise database  
 redis = require('redis')
 db = redis.createClient(6379, 'incandenza.ucc.asn.au')
+
+# crypto
+crypto = require('crypto')
+cryptical.hash = (str) ->
+    crypto.createHash('sha1').update(str).digest('hex')
 
 # define routes
 server.get '/hi', (request, response, next) ->
@@ -18,10 +28,13 @@ server.get '/game/load/:hash', (request, response, next) ->
         else response.send(404)
         next()
 
-server.post '/game/save', (request, response, next) ->
-    # just sends back the body for now
-    console.log request.body
-    response.send(request.body.foo)
+server.get '/game/save', (req, res, next) ->
+    res.send 'fuck you'
+    
+server.post '/game/save', (req, res, next) ->
+    res.header "Access-Control-Allow-Origin", "http://localhost:7793"
+    res.header "Access-Control-Allow-Headers", "X-Requested-With"
+    res.send 'thanks for ' + cryptical.hash(req.body) + '!'
     next()
 
 # start listening

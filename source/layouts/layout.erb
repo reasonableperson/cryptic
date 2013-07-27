@@ -17,29 +17,49 @@
         <link rel="stylesheet" href="css/main.css">
         <link rel="stylesheet" href="bootstrap/css/bootstrap.css">
         <link rel="stylesheet" href="css/crossword.css">
-        <script src="js/vendor/modernizr-2.6.1.min.js"></script>
+        <script src="js/lib/modernizr-2.6.1.min.js"></script>
     </head>
     <body>
         <!--[if lt IE 7]>
             <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
         <![endif]-->
         <div class="container-fluid">
-        <%= yield %>
+        <div class="row-fluid">
+            <div id="header" class="span12">
+                <h1>example</h1>
+            </div>
         </div>
+        <div class="row-fluid">
+            <div id="leftcol" class="span8">
+            <%= yield %>
+            </div>
+            <div id="rightcol" class="span4">
+                <h4>Load data</h4>
+                <button class="btn" id="random">Random grid</button>
+                <button class="btn" id="ajaxLoad">AJAX sample.json</button>
+                <button class="btn" id="localLoad">Local storage</button>
+                <h4>Save data</h4>
+                <button class="btn" id="ajaxSave">Save AJAX</button>
+                <button class="btn" id="localSave">Save to local storage</button>
+                <h4>Edit puzzle</h4>
+                <button class="btn" id="toggleCells">Toggle black cells</div>
+            </div>
+        </div>
+        </div><!-- end .container-fluid -->
 
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+        <script src="js/lib/jquery-1.9.1.min.js"></script>
+        <script src="js/lib/angular-1.0.7.min.js"></script>
         <script src="js/crossword.js"></script>
         <script src="js/events.js"></script>
         <script src="js/navigation.js"></script>
         <script src="js/init.js"></script>
 
-        <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
+        <!-- Google Analytics: change UA-XXXXX-X to be your site's ID.
         <script>
             var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
             (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
             g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
             s.parentNode.insertBefore(g,s)}(document,'script'));
-        </script>
+        </script> -->
     </body>
 </html>

@@ -12,6 +12,15 @@ $('#ajaxLoad').click ->
         window.puzzle = new cryptical.Crossword(data)
         puzzle.draw()
 
+$('#ajaxSave').click ->
+    $.ajax
+        url: 'http://localhost:7937/game/save',
+        contentType: 'application/json',
+        dataType: 'json',
+        data: cryptical.puzzle.toJson(),
+        type: 'POST',
+        success: console.log
+
 $('#localSave').click ->
     if (!Modernizr.localstorage)
         console.error('Your browser doesn\'t support local storage.')
@@ -30,11 +39,16 @@ $('#toggleCells').click ->
     $(@).toggleClass('active')
     $('#crossword').toggleClass('toggleCells')
 
-$('#crossword').on 'click', 'td', ->
-    if $('#toggleCells').hasClass('active')
-        [row, col] = [$(@).data('row'), $(@).data('col')]
-        $(@).toggleClass('black')
-        if $(@).hasClass('black')
-            cryptical.puzzle.cells[row][col] = '@'
-        else
-            cryptical.puzzle.cells[row][col] = ' '
+$('#crossword')
+    .on 'click', 'td', ->
+        if $('#toggleCells').hasClass('active')
+            [row, col] = [$(@).data('row'), $(@).data('col')]
+            $(@).toggleClass('black')
+            if $(@).hasClass('black')
+                cryptical.puzzle.cells[row][col] = '@'
+            else
+                cryptical.puzzle.cells[row][col] = ' '
+    .on 'blur keyup paste', '[contenteditable]', ->
+        txt = $.trim($(@).text().toUpperCase())
+        if txt.length > 1 then txt = txt.slice(-1)
+        $(@).text(txt)
