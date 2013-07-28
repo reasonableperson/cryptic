@@ -1,0 +1,21 @@
+extends 2col
+
+block title
+    h1 cryptical
+
+block leftcol
+    table#crossword(ng-app)
+        tbody
+            tr
+                td.error Nothing here {{'yet' + '!'}}.
+
+block rightcol
+    h4 Load data
+    button#random.btn Random grid
+    button#ajaxLoad.btn AJAX sample.json
+    button#localLoad.btn Local storage
+    h4 Save data
+    button#ajaxSave.btn Save AJAX
+    button#localSave.btn Save to local storage
+    h4 Edit puzzle
+    button#toggleCells.btn Toggle black cells</div>

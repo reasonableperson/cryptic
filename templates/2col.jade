@@ -1,0 +1,27 @@
+extends base
+
+block head_includes
+    link(rel='stylesheet', href='css/normalize.css')
+    link(rel='stylesheet', href='css/main.css')
+    link(rel='stylesheet', href='css/crossword.css')
+    link(rel='stylesheet', href='bootstrap/css/bootstrap.css')
+    script(src='js/lib/modernizr-2.6.1.min.js')
+
+block scripts
+    script(src="js/lib/jquery-1.9.1.min.js")
+    script(src="js/lib/angular-1.0.7.min.js")
+    script(src="js/crossword.js")
+    script(src="js/events.js")
+    script(src="js/navigation.js")
+    script(src="js/init.js")
+
+block content
+    div.row-fluid
+        div#header.span12
+        block title
+
+    div.row-fluid
+        div#leftcol.span8
+            block leftcol
+        div#rightcol.span4
+            block rightcol

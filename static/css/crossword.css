@@ -1,0 +1,21 @@
+h1 {text-align: center;}
+#crossword {margin: 1em auto;}
+#crossword td {
+    position: relative; /* to contain .num */
+    width: 40px; height: 40px;
+    border: 2px black solid;
+    text-align: center;
+}
+#crossword td.error {
+    padding: 1em;
+    width: 500px;
+}
+#crossword .num {
+    font-size: 50%;
+    position: absolute;
+    top: 5px; left: 5px;
+}
+#crossword .black {background: black;}
+
+#crossword.toggleCells td {cursor: pointer;}
+#rightcol {text-align: center;}
