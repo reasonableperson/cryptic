@@ -1,11 +1,5 @@
 cryptical = {}
 
-# initialise server
-restify = require('restify')
-server = restify.createServer()
-server.use restify.bodyParser()
-server.use restify.fullResponse()
-
 express = require('express')
 app = express()
 
@@ -15,20 +9,37 @@ app.use express.static(__dirname + '/static')
 # templates
 jade = require('jade')
 fs = require('fs')
-template_filename = (name) -> __dirname + '/templates/' + name + '.jade'
 
-app.get '/', (request, response, next) ->
-    template = jade.compile fs.readFileSync( template_filename 'home' ),
-        filename: template_filename 'home'
+# helper for rendering a standard page
+render_template = (tpl, opts, req, res, next) ->
+    # locate template directory
+    filename = __dirname + '/templates/' + tpl + '.jade'
+    # compile template function
+    template = jade.compile fs.readFileSync( filename ),
+        filename: filename
         layout: false
         pretty: true
-    html = template
-        contents: 'abc'
-    response.writeHead 200,
+    # execute template with variables
+    html = template opts
+    # finish up
+    res.writeHead 200,
       'Content-Length': Buffer.byteLength(html),
       'Content-Type': 'text/html'
-    response.write(html)
+    res.write(html)
     next()
+
+# views
+app.get '/', (req, res, next) ->
+    opts =
+        contents: 'abc'
+    render_template 'home', opts, req, res, next
+
+app.get '/blank', (req, res, next) ->
+    opts =
+        contents: 'abc'
+    render_template 'blank', opts, req, res, next
+
+# API views
 
 # initialise database  
 redis = require('redis')
@@ -52,6 +63,7 @@ app.post '/game/save', (req, res, next) ->
     res.send 'thanks for ' + cryptical.hash(req.body) + '!'
     next()
 
+# start app
 PORT = 7937
 app.listen PORT
 console.log 'Express server listening on port ' + PORT + '.'

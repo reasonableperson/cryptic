@@ -4,10 +4,11 @@ block title
     h1 cryptical
 
 block leftcol
-    table#crossword(ng-app)
-        tbody
-            tr
-                td.error Nothing here {{'yet' + '!'}}.
+    table#crossword(ng-controller="CrosswordCtrl")
+        tr(ng-repeat="row in cells")
+            td(ng-repeat="col in row") {{col}}
+    div#test
+        p Will AngularJS {{'concatenate' + ' these?'}}
 
 block rightcol
     h4 Load data
