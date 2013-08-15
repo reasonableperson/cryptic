@@ -20,7 +20,7 @@ block rightcol
     button(ng-click="load('/sample.json')") AJAX sample.json
     button#localLoad.btn Local storage
     h4 Save data
-    button#ajaxSave.btn Save AJAX
+    button(ng-click="save()") Save AJAX
     button#localSave.btn Save to local storage
     h4 Edit puzzle
     button#toggleCells.btn Toggle black cells</div>

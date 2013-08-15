@@ -5,8 +5,10 @@ class Cell
             @class = 'black'
 
 class Crossword
-    constructor: (@cells, @title, @author) ->
-        if not @cells? then @randomise()
+    constructor: (array) ->
+        if not array? then @randomise()
+        else
+            @cells = ((new Cell c for c in row) for row in array)
     toJson: -> JSON.stringify(@cells)
     randomise: (width, height) ->
         width = width || 18; height = height || 18
@@ -21,17 +23,23 @@ class Crossword
 cryptical = angular.module 'cryptical', []
 cryptical.value 'crossword', new Crossword()
 
-cryptical.controller 'CrosswordCtrl', [
-    '$scope', '$http', 'crossword',
+cryptical.controller 'CrosswordCtrl', ['$scope', '$http', 'crossword',
     ($scope, $http, crossword) ->
         window.$scope = $scope
         $scope.crossword = crossword
         $scope.load = (url) ->
             $http.get(url)
             .success (data, status, headers, config) ->
-                console.log data
+                console.log 'got json:', data, typeof(data)
+                $scope.crossword = new Crossword(data)
             .error (data, status, headers, config) ->
-                console.log data
+                console.error status, data
+        $scope.save = ->
+            $http.post('/game/save')
+            .success (data) ->
+                console.log 'got response:', data, typeof(data)
+            .error (data, status, headers, config) ->
+                console.error status, data
 ]
 
 cryptical.directive 'oneCharOnly', -> 
