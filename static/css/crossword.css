@@ -6,6 +6,15 @@ h1 {text-align: center;}
     border: 2px black solid;
     text-align: center;
 }
+#crossword td input {
+    width: 1em;
+    text-align: center;
+    border: 0px;
+    font-size: 150%;
+}
+#crossword td.black input {
+    display: none;
+}
 #crossword td.error {
     padding: 1em;
     width: 500px;

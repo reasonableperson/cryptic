@@ -6,15 +6,18 @@ block title
 block leftcol
     h1.title {{crossword.title}}
     h2.author {{crossword.author}}
-    table(contenteditable, ng-model="crossword")
+    table
         tbody
             tr(ng-repeat="row in crossword.cells")
-                    td(ng-repeat="cell in row", ng-bind="cell.char", ng-class="cell.class")
+                td(ng-repeat="cell in row", ng-class="cell.class")
+                    input(ng-model="cell.char", one-char-only)
+
+    h2 test
 
 block rightcol
     h4 Load data
     button(ng-click="crossword.randomise()") Random grid
-    button#ajaxLoad.btn AJAX sample.json
+    button(ng-click="load('/sample.json')") AJAX sample.json
     button#localLoad.btn Local storage
     h4 Save data
     button#ajaxSave.btn Save AJAX

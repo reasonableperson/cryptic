@@ -21,22 +21,22 @@ class Crossword
 cryptical = angular.module 'cryptical', []
 cryptical.value 'crossword', new Crossword()
 
+cryptical.controller 'CrosswordCtrl', [
+    '$scope', '$http', 'crossword',
+    ($scope, $http, crossword) ->
+        window.$scope = $scope
+        $scope.crossword = crossword
+        $scope.load = (url) ->
+            $http.get(url)
+            .success (data, status, headers, config) ->
+                console.log data
+            .error (data, status, headers, config) ->
+                console.log data
+]
 
-window.CrosswordCtrl = ($scope, crossword) ->
-    $scope.crossword = crossword
-    # window.crossword = $scope.crossword
-
-###
-cryptical.directive 'contenteditable', ->
-    require: 'ngModel',
-    link: (scope, elm, attrs, ctrl) ->
-        # view -> model
-        elm.bind 'blur', ->
-            scope.$apply ->
-                ctrl.$setViewValue elm.html()
- 
-        # model -> view
-        ctrl.$render = (value) -> elm.html value
-        # load init value from DOM
-        ctrl.$setViewValue elm.html()
-###
+cryptical.directive 'oneCharOnly', -> 
+    return (scope, elem, attrs) -> elem
+        .click ->
+            @select()
+        .change ->
+            @value = @value.toUpperCase()
