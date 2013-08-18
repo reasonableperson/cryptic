@@ -10,6 +10,7 @@ block leftcol
         tbody
             tr(ng-repeat="row in crossword.cells")
                 td(ng-repeat="cell in row", ng-class="cell.class")
+                    span.num(ng-if="cell.isNumbered()") {{cell.isNumbered()}}
                     input(ng-model="cell.char", one-char-only)
 
     h2 test

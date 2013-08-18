@@ -20,9 +20,9 @@ h1 {text-align: center;}
     width: 500px;
 }
 #crossword .num {
-    font-size: 50%;
+    font-size: 80%;
     position: absolute;
-    top: 5px; left: 5px;
+    top: -2px; left: 2px;
 }
 #crossword .black {background: black;}
 
