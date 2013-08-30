@@ -10,12 +10,17 @@ block leftcol
         tbody
             tr(ng-repeat="row in crossword.cells")
                 td(ng-repeat="cell in row", ng-class="cell.class")
-                    span.num(ng-if="cell.isNumbered()") {{cell.isNumbered()}}
+                    span.num(ng-if="cell.num") {{cell.num}}
                     input(ng-model="cell.char", one-char-only)
 
     h2 test
 
 block rightcol
+    h4 Clues
+    div(ng-repeat="(direction, list) in crossword.clues", ng-class="direction")
+        h5 {{direction}}
+        ol
+            li(ng-repeat="(num, clue) in list | orderBy:null", value="{{num}}") {{clue}}
     h4 Load data
     button(ng-click="crossword.randomise()") Random grid
     button(ng-click="load('/sample.json')") AJAX sample.json

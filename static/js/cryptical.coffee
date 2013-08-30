@@ -1,14 +1,8 @@
 class Cell
-    constructor: (@row, @col, @char) ->
+    constructor: (@row, @col, @char, @num) ->
         if @char is '@'
             @char = ''
             @class = 'black'
-    down: -> 
-        console.log 'this.caller', @caller
-        @.$parent[@row+1][@col]
-    isNumbered: ->
-        console.log @down()
-        return false
 
 class Crossword
     constructor: (array) ->
@@ -16,6 +10,24 @@ class Crossword
         else
             @cells = ((new Cell r, c, char for c, char in row) for r, row in array)
         @current = [0,0]
+        @number()
+    number: ->
+        counter = 0
+        @clues = {across: {}, down: {}}
+        for row, i in @cells
+            for cell, j in row when cell.class isnt 'black'
+                up = if i > 0 then (@cells[i-1][j].class isnt 'black') else false
+                down = if i+1 < @cells.length then (@cells[i+1][j].class isnt 'black') else false
+                left = if j > 0 then (row[j-1].class isnt 'black') else false
+                right = if j+1 < row.length then (row[j+1].class isnt 'black') else false
+                if right and not left
+                    cell.num = ++counter
+                    @clues.across[cell.num] = ""
+                if down and not up
+                    if not right or left then cell.num = ++counter
+                    @clues.down[cell.num] = ""
+        console.log 'after analysis, cells:', @cells
+        console.log 'clues:', @clues
     move: (inRow, acrossRows) ->
         @current[0] += inRow; @current[1] += acrossRows;
         @cells[@current[0]][@current[1]]
@@ -23,7 +35,7 @@ class Crossword
     across: -> @cells[@current[0]][@current[1]+1]
     toJson: -> JSON.stringify(@cells)
     randomise: (width, height) ->
-        width = width || 18; height = height || 18
+        width = width || 10; height = height || 10
         randomChar = ->
             validChars = '@ABCD'
             validChars[Math.floor( Math.random()*validChars.length )]
@@ -52,6 +64,9 @@ cryptical.controller 'CrosswordCtrl', ['$scope', '$http', 'crossword',
                 console.log 'got response:', data, typeof(data)
             .error (data, status, headers, config) ->
                 console.error status, data
+        $scope.number = ->
+            for cell of crossword.cells
+                console.log cell
 ]
 
 cryptical.directive 'oneCharOnly', -> 

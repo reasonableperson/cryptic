@@ -64,6 +64,6 @@ app.post '/game/save', (req, res, next) ->
     next()
 
 # start app
-PORT = 7937
+PORT = 7793
 app.listen PORT
 console.log 'Express server listening on port ' + PORT + '.'
