@@ -9,3 +9,5 @@
 
 static/js/*.js
 server.js
+
+node_modules

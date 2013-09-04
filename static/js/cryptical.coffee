@@ -1,5 +1,39 @@
+class Clue
+    constructor: (@length, @text) ->
+        if not @text then @text = '(placeholder)'
+
+countAnswerLength = (cells, i, j, direction) ->
+    length = 0
+    if direction is 'across'
+        while j < cells[i].length and cells[i][j].class isnt 'black'
+            j++; length++
+    if direction is 'down'
+        while i < cells.length and cells[i][j].class isnt 'black'
+            i++; length++
+    return length
+
+# Step over the cells of a crossword grid and number them,
+# attaching a dictionary of empty clues to the crossword.
+analyseGrid = (crossword) ->
+    counter = 0
+    clues = crossword.clues = {across: {}, down: {}}
+    cells = crossword.cells
+    for row, i in cells
+        for cell, j in row when cell.class isnt 'black'
+            up = if i > 0 then (cells[i-1][j].class isnt 'black') else false
+            down = if i+1 < cells.length then (cells[i+1][j].class isnt 'black') else false
+            left = if j > 0 then (row[j-1].class isnt 'black') else false
+            right = if j+1 < row.length then (row[j+1].class isnt 'black') else false
+            if right and not left   # across clue
+                cell.num = ++counter
+                clues.across[cell.num] = new Clue(countAnswerLength cells, i, j, 'across')
+            if down and not up      # down clue
+                if not right or left
+                    cell.num = ++counter
+                clues.down[cell.num] = new Clue(countAnswerLength cells, i, j, 'down')
+
 class Cell
-    constructor: (@row, @col, @char, @num) ->
+    constructor: (@char, @num) ->
         if @char is '@'
             @char = ''
             @class = 'black'
@@ -8,9 +42,9 @@ class Crossword
     constructor: (array) ->
         if not array? then @randomise()
         else
-            @cells = ((new Cell r, c, char for c, char in row) for r, row in array)
+            @cells = ((new Cell char for c, char in row) for r, row in array)
         @current = [0,0]
-        @number()
+        analyseGrid @
     number: ->
         counter = 0
         @clues = {across: {}, down: {}}
@@ -39,7 +73,7 @@ class Crossword
         randomChar = ->
             validChars = '@ABCD'
             validChars[Math.floor( Math.random()*validChars.length )]
-        rowGen = (rowIndex, cols) -> (new Cell rowIndex, c, randomChar() for c in [0..cols-1])
+        rowGen = (rowIndex, cols) -> (new Cell randomChar() for c in [0..cols-1])
         @cells = (rowGen r, width for r in [0..height-1])
         @title = 'randomly-generated'
         @author = 'anonymous'
@@ -49,7 +83,6 @@ cryptical.value 'crossword', new Crossword()
 
 cryptical.controller 'CrosswordCtrl', ['$scope', '$http', 'crossword',
     ($scope, $http, crossword) ->
-        window.$scope = $scope
         $scope.crossword = crossword
         $scope.load = (url) ->
             $http.get(url)
@@ -67,6 +100,11 @@ cryptical.controller 'CrosswordCtrl', ['$scope', '$http', 'crossword',
         $scope.number = ->
             for cell of crossword.cells
                 console.log cell
+]
+
+cryptical.controller 'CluesCtrl', ['$scope', 'crossword',
+    ($scope, crossword) ->
+        $scope.crossword = crossword
 ]
 
 cryptical.directive 'oneCharOnly', -> 
