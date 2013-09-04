@@ -3,6 +3,9 @@ cryptical = {}
 express = require('express')
 app = express()
 
+# render stylus to CSS
+app.use(require('stylus').middleware(__dirname + '/static'));
+
 # static files
 app.use express.static(__dirname + '/static')
 
@@ -32,7 +35,7 @@ render_template = (tpl, opts, req, res, next) ->
 app.get '/', (req, res, next) ->
     opts =
         contents: 'abc'
-    render_template 'home', opts, req, res, next
+    render_template 'puzzle', opts, req, res, next
 
 app.get '/blank', (req, res, next) ->
     opts =

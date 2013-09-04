@@ -1,30 +1,48 @@
-h1 {text-align: center;}
-#crossword {margin: 1em auto;}
+h1 {
+  text-align: center;
+}
+#crossword {
+  margin: 1em auto;
+}
 #crossword td {
-    position: relative; /* to contain .num */
-    width: 40px; height: 40px;
-    border: 2px black solid;
-    text-align: center;
+  position: relative;
+/* to contain .num */
+  width: 40px;
+  height: 40px;
+  border: 2px #000 solid;
+  text-align: center;
 }
 #crossword td input {
-    width: 1em;
-    text-align: center;
-    border: 0px;
-    font-size: 150%;
+  width: 1em;
+  text-align: center;
+  border: 0px;
+  font-size: 150%;
 }
-#crossword td.black input {
-    display: none;
+#crossword .black input {
+  display: none;
 }
 #crossword td.error {
-    padding: 1em;
-    width: 500px;
+  padding: 1em;
+  width: 500px;
 }
 #crossword .num {
-    font-size: 80%;
-    position: absolute;
-    top: -2px; left: 2px;
+  font-size: 80%;
+  position: absolute;
+  top: -2px;
+  left: 2px;
 }
-#crossword .black {background: black;}
-
-#crossword.toggleCells td {cursor: pointer;}
-#rightcol {text-align: center;}
+#crossword .black {
+  background: #000;
+}
+#crossword .toggleCells td {
+  cursor: pointer;
+}
+#rightcol h4 {
+  text-align: center;
+}
+#rightcol .clues h5 {
+  text-align: center;
+}
+#rightcol .controls {
+  text-align: center;
+}

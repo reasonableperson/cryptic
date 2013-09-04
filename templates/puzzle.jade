@@ -1,0 +1,36 @@
+extends 2col
+
+block title
+    h1 cryptical
+
+block leftcol
+    h1.title {{crossword.title}}
+    h2.author {{crossword.author}}
+    table
+        tbody
+            tr(ng-repeat="row in crossword.cells")
+                td(ng-repeat="cell in row", ng-class="cell.class")
+                    span.num(ng-if="cell.num") {{cell.num}}
+                    input(ng-model="cell.char", one-char-only)
+
+    h2 test
+
+block rightcol
+    .clues
+        h4 Clues
+        .pure-g
+            .pure-u-1-2(ng-repeat="(direction, list) in crossword.clues", ng-class="direction")
+                h5 {{direction}}
+                ol
+                    li(ng-repeat="(num, clue) in list | orderBy:null", value="{{num}}", contenteditable)
+                        {{clue}}
+    .controls
+        h4 Load data
+        button(ng-click="crossword.randomise()") Random grid
+        button(ng-click="load('/sample.json')") AJAX sample.json
+        button#localLoad.btn Local storage
+        h4 Save data
+        button(ng-click="save()") Save AJAX
+        button#localSave.btn Save to local storage
+        h4 Edit puzzle
+        button#toggleCells.btn Toggle black cells</div>

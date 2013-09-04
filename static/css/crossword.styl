@@ -1,0 +1,39 @@
+h1
+    text-align: center
+
+#crossword
+    margin: 1em auto
+    td
+        position: relative /* to contain .num */
+        width: 40px
+        height: 40px
+        border: 2px black solid
+        text-align: center
+        input
+            width: 1em
+            text-align: center
+            border: 0px
+            font-size: 150%
+    .black input
+        display: none
+    td.error
+        padding: 1em
+        width: 500px
+    .num
+        font-size: 80%
+        position: absolute
+        top: -2px
+        left: 2px
+    .black
+        background: black
+    .toggleCells td
+        cursor: pointer
+
+#rightcol 
+    h4
+        text-align: center
+    .clues
+        h5
+            text-align: center
+    .controls
+        text-align: center
