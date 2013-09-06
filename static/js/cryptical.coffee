@@ -37,6 +37,9 @@ class Cell
         if @char is '@'
             @char = ''
             @class = 'black'
+    toggle: ->
+            if @class is 'black' then @class = ''
+            else @class = 'black'
 
 class Crossword
     constructor: (array) ->
@@ -45,6 +48,7 @@ class Crossword
             @cells = ((new Cell char for c, char in row) for r, row in array)
         @current = [0,0]
         analyseGrid @
+    toggleCells = false
     number: ->
         counter = 0
         @clues = {across: {}, down: {}}
@@ -112,6 +116,6 @@ cryptical.directive 'oneCharOnly', ->
         .on 'click keyup', ->
             @select()
             $scope.$parent.$parent.crossword.current = [$scope.$parent.$index, $scope.$index]
-            console.log $scope.$parent.$parent.crossword.current
+            # console.log $scope.$parent.$parent.crossword.current
         .change ->
             @value = @value.toUpperCase()

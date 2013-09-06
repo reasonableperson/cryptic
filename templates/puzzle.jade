@@ -9,7 +9,7 @@ block leftcol
     table(ng-controller="CrosswordCtrl")
         tbody
             tr(ng-repeat="row in crossword.cells")
-                td(ng-repeat="cell in row", ng-class="cell.class")
+                td(ng-repeat="cell in row", ng-class="cell.class", ng-click="!cryptical.toggleCells || cell.toggle()")
                     span.num(ng-if="cell.num") {{cell.num}}
                     input(ng-model="cell.char", one-char-only)
 
@@ -33,4 +33,4 @@ block rightcol
         button(ng-click="save()") Save AJAX
         button#localSave.btn Save to local storage
         h4 Edit puzzle
-        button#toggleCells.btn Toggle black cells</div>
+        button(ng-click="cryptical.toggleCells = !cryptical.toggleCells", ng-class="(cryptical.toggleCells) ? 'pure-button-active' : ''").pure-button Toggle black cells
