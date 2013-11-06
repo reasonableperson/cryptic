@@ -30,27 +30,30 @@ analyseGrid = (crossword) ->
 
 class Crossword
     constructor: (array) ->
-        if not array? then @randomise()
-        else
-            @cells = ((new Cell char for c, char in row) for r, row in array)
-        @current = [0,0]
-        analyseGrid @
+        if not array? then @load(@random())
+        else @load(array)
     toggleCells = false
-    move: (inRow, acrossRows) ->
-        @current[0] += inRow; @current[1] += acrossRows;
-        @cells[@current[0]][@current[1]]
-    down: -> @cells[@current[0]+1][@current[1]]
-    across: -> @cells[@current[0]][@current[1]+1]
-    toJson: -> JSON.stringify(@cells)
-    randomise: (width, height) ->
+    load: (array) -> 
+        console.log 'constructing from this array', array
+        @cells = ((new Cell char for char in row) for row in array)
+        @title = 'loaded'
+        @author = 'unsure'
+        analyseGrid @
+    serialise: ->
+        stringify_char = (char) ->
+            if char == '' then return '@'
+            else return char
+        stringify_row = (row) ->
+            (stringify_char(cell.char) for cell in row).join('')
+        puzzle_str = (stringify_row(row) for row in @cells)
+        angular.toJson puzzle_str
+    random: (width, height) ->
         width = width || 10; height = height || 10
         randomChar = ->
             validChars = '@ABCD'
             validChars[Math.floor( Math.random()*validChars.length )]
-        rowGen = (rowIndex, cols) -> (new Cell randomChar() for c in [0..cols-1])
+        rowGen = (rowIndex, cols) -> (randomChar() for c in [0..cols-1]).join('')
         @cells = (rowGen r, width for r in [0..height-1])
-        @title = 'randomly-generated'
-        @author = 'anonymous'
 
 class Cell
     constructor: (@char, @num) ->
@@ -78,19 +81,6 @@ cryptical.controller 'CrosswordCtrl', ['$scope', '$http', 'crossword',
             console.log char
             str = 'f'
             @value = str.toUpperCase()
-        $scope.load = (url) ->
-            $http.get(url)
-            .success (data, status, headers, config) ->
-                console.log 'got json:', data, typeof(data)
-                $scope.crossword = new Crossword(data)
-            .error (data, status, headers, config) ->
-                console.error status, data
-        $scope.save = ->
-            $http.post('/game/save')
-            .success (data) ->
-                console.log 'got response:', data, typeof(data)
-            .error (data, status, headers, config) ->
-                console.error status, data
 ]
 
 cryptical.controller 'CluesCtrl', ['$scope', 'crossword',
@@ -101,9 +91,26 @@ cryptical.controller 'CluesCtrl', ['$scope', 'crossword',
 cryptical.controller 'ButtonsCtrl', ['$scope', 'crossword',
     ($scope, crossword) ->
         $scope.crossword = crossword
+        $scope.load = (url) ->
+            $http.get(url)
+            .success (data, status, headers, config) ->
+                console.log 'got json:', data, typeof(data)
+                $scope.crossword = new Crossword(data)
+            .error (data, status, headers, config) ->
+                console.error status, data
+        $scope.load_random = -> crossword.load crossword.random()
+        $scope.save = ->
+            console.log 'sending the following:', crossword.serialise()
+            $http.post('/game/save')
+            .success (data) ->
+                console.log 'got response:', data, typeof(data)
+            .error (data, status, headers, config) ->
+                console.error status, data
+        $scope.load_local = ->
+            data = JSON.parse localStorage['crossword']
+            crossword.load(data)
+        $scope.save_local = ->
+            data = crossword.serialise()
+            console.log 'saving this locally:', data
+            localStorage['crossword'] = data
 ]
-
-cryptical.directive 'oneCharOnly', -> 
-    return ($scope, elem, attrs) -> elem
-        .on 'click keyup', ->
-            @select()
