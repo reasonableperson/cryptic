@@ -1,7 +1,3 @@
-class Clue
-    constructor: (@length, @text) ->
-        if not @text then @text = '(placeholder)'
-
 countAnswerLength = (cells, i, j, direction) ->
     length = 0
     if direction is 'across'
@@ -32,15 +28,6 @@ analyseGrid = (crossword) ->
                     cell.num = ++counter
                 clues.down[cell.num] = new Clue(countAnswerLength cells, i, j, 'down')
 
-class Cell
-    constructor: (@char, @num) ->
-        if @char is '@'
-            @char = ''
-            @class = 'black'
-    toggle: ->
-            if @class is 'black' then @class = ''
-            else @class = 'black'
-
 class Crossword
     constructor: (array) ->
         if not array? then @randomise()
@@ -49,23 +36,6 @@ class Crossword
         @current = [0,0]
         analyseGrid @
     toggleCells = false
-    number: ->
-        counter = 0
-        @clues = {across: {}, down: {}}
-        for row, i in @cells
-            for cell, j in row when cell.class isnt 'black'
-                up = if i > 0 then (@cells[i-1][j].class isnt 'black') else false
-                down = if i+1 < @cells.length then (@cells[i+1][j].class isnt 'black') else false
-                left = if j > 0 then (row[j-1].class isnt 'black') else false
-                right = if j+1 < row.length then (row[j+1].class isnt 'black') else false
-                if right and not left
-                    cell.num = ++counter
-                    @clues.across[cell.num] = ""
-                if down and not up
-                    if not right or left then cell.num = ++counter
-                    @clues.down[cell.num] = ""
-        console.log 'after analysis, cells:', @cells
-        console.log 'clues:', @clues
     move: (inRow, acrossRows) ->
         @current[0] += inRow; @current[1] += acrossRows;
         @cells[@current[0]][@current[1]]
@@ -82,12 +52,32 @@ class Crossword
         @title = 'randomly-generated'
         @author = 'anonymous'
 
+class Cell
+    constructor: (@char, @num) ->
+        if @char is '@'
+            @char = ''
+            @class = 'black'
+    toggle: ->
+            if @class is 'black' then @class = ''
+            else @class = 'black'
+
+class Clue
+    constructor: (@length, @text) ->
+        if not @text then @text = '(placeholder)'
+
+# Here we initiate the Angular module by constructing a
+# Crossword object. So initialisation code can be found inside
+# Crossword's constructor...
 cryptical = angular.module 'cryptical', []
 cryptical.value 'crossword', new Crossword()
 
 cryptical.controller 'CrosswordCtrl', ['$scope', '$http', 'crossword',
     ($scope, $http, crossword) ->
         $scope.crossword = crossword
+        $scope.forceUppercase = (char) ->
+            console.log char
+            str = 'f'
+            @value = str.toUpperCase()
         $scope.load = (url) ->
             $http.get(url)
             .success (data, status, headers, config) ->
@@ -101,12 +91,14 @@ cryptical.controller 'CrosswordCtrl', ['$scope', '$http', 'crossword',
                 console.log 'got response:', data, typeof(data)
             .error (data, status, headers, config) ->
                 console.error status, data
-        $scope.number = ->
-            for cell of crossword.cells
-                console.log cell
 ]
 
 cryptical.controller 'CluesCtrl', ['$scope', 'crossword',
+    ($scope, crossword) ->
+        $scope.crossword = crossword
+]
+
+cryptical.controller 'ButtonsCtrl', ['$scope', 'crossword',
     ($scope, crossword) ->
         $scope.crossword = crossword
 ]
@@ -115,7 +107,3 @@ cryptical.directive 'oneCharOnly', ->
     return ($scope, elem, attrs) -> elem
         .on 'click keyup', ->
             @select()
-            $scope.$parent.$parent.crossword.current = [$scope.$parent.$index, $scope.$index]
-            # console.log $scope.$parent.$parent.crossword.current
-        .change ->
-            @value = @value.toUpperCase()

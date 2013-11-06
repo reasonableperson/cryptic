@@ -11,7 +11,7 @@ block leftcol
             tr(ng-repeat="row in crossword.cells")
                 td(ng-repeat="cell in row", ng-class="cell.class", ng-click="!cryptical.toggleCells || cell.toggle()")
                     span.num(ng-if="cell.num") {{cell.num}}
-                    input(ng-model="cell.char", one-char-only)
+                    input(ng-model="cell.char" oneCharOnly)
 
 block rightcol
     .clues(ng-controller="CluesCtrl")
@@ -24,7 +24,7 @@ block rightcol
                         span.text(contenteditable) {{clue.text}}
                         |  
                         span.length ({{clue.length}})
-    .controls
+    .buttons(ng-controller="ButtonsCtrl")
         h4 Load data
         button(ng-click="crossword.randomise()") Random grid
         button(ng-click="load('/sample.json')") AJAX sample.json
