@@ -6,7 +6,7 @@ block title
 block leftcol
     h1.title {{crossword.title}}
     h2.author {{crossword.author}}
-    table(ng-controller="CrosswordCtrl")
+    table
         tbody
             tr(ng-repeat="row in crossword.cells")
                 td(ng-repeat="cell in row", ng-class="cell.class", ng-click="!cryptical.toggleCells || cell.toggle()")
@@ -14,16 +14,16 @@ block leftcol
                     input(ng-model="cell.char" oneCharOnly)
 
 block rightcol
-    .clues(ng-controller="CluesCtrl")
+    .clues
         h4 Clues
         .pure-g-r
             .pure-u-1-2(ng-repeat="(direction, list) in crossword.clues", ng-class="direction")
                 h5 {{direction}}
                 ol
-                    li(ng-repeat="(num, clue) in list | orderBy:null", value="{{num}}")
-                        span.text(contenteditable) {{clue.text}}
-                        |  
-                        span.length ({{clue.length}})
+                    //li(ng-repeat="(num, clue) in list | orderBy:null", value="{{num}}")
+                    li(ng-repeat="(num, clue) in list", value="{{num}}")
+                        input(ng-model="clue.content")
+                        span.length  ({{clue.length}})
     .buttons(ng-controller="ButtonsCtrl")
         h4 Load data
         button(ng-click="load_random()").pure-button Random grid
