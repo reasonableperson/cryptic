@@ -1,10 +1,19 @@
 .buttons(ng-controller="ButtonsCtrl")
-    h4 Load data
-    button(ng-click="load_random()").pure-button Random grid
-    // button(ng-click="load_url('/sample.json')").pure-button AJAX sample.json
-    button(ng-click="load_local()").pure-button Local storage
-    h4 Save data
-    button(ng-click="save()").pure-button AJAX
-    button(ng-click="save_local()").pure-button Local storage
+
+    h4 Local storage
+    button(ng-click="load_local()").pure-button Load
+    button(ng-click="save_local()").pure-button Save
+
     h4 Edit puzzle
-        button(ng-click="crossword.toggleCells = !crossword.toggleCells", ng-class="(crossword.toggleCells) ? 'pure-button-active' : ''").pure-button Toggle black cells
+    button.pure-button(
+        ng-click="crossword.toggleCells = !crossword.toggleCells",
+        ng-class="(crossword.toggleCells) ? 'pure-button-active' : ''"
+        ) Toggle black cells
+    
+    h4 New puzzle
+    button.pure-button(ng-click="load(crossword.blank())") Empty crossword
+    button.pure-button(ng-click="load(crossword.random())") Random crossword
+    .dimensions
+        input(ng-model="crossword.width")
+        | ×
+        input(ng-model="crossword.height")

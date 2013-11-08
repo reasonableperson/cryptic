@@ -9,10 +9,10 @@ countAnswerLength = (cells, i, j, direction) ->
     return length
 
 # Step over the cells of a crossword grid and number them,
-# attaching a dictionary of empty clues to the crossword.
+# returning a dictionary of empty clues.
 analyseGrid = (crossword) ->
     counter = 0
-    clues = crossword.clues or {across: {}, down: {}}
+    clues = {across: {}, down: {}}
     cells = crossword.cells
     for row, i in cells
         for cell, j in row when cell.class isnt 'black'
@@ -31,6 +31,7 @@ analyseGrid = (crossword) ->
                 if not clues.down[cell.num]?
                     clues.down[cell.num] =
                         length: countAnswerLength cells, i, j, 'down'
+    return clues
 
 class Crossword
     constructor: -> 
@@ -41,9 +42,12 @@ class Crossword
         console.log 'loading from this JSON:', crosswordString
         array = JSON.parse(crosswordString)
         @cells = ((new Cell char for char in row) for row in array.puzzle)
-        @clues = array.clues
+        @clues = array.clues or analyseGrid(@)
         @title = 'loaded'
         @author = 'unsure'
+        console.log '@cells', @cells, @cells[0].length
+        @width = @cells[0].length
+        @height = @cells.length
         analyseGrid @
     toggleCells = false
     serialise: ->
@@ -56,14 +60,19 @@ class Crossword
         return angular.toJson
             puzzle: puzzle
             clues: @clues
-    random: (width, height) ->
-        width = width || 10; height = height || 10
+    random: ->
+        console.log 'generating random...'
         randomChar = ->
             validChars = '@ABCD'
             validChars[Math.floor( Math.random()*validChars.length )]
-        rowGen = (rowIndex, cols) -> (randomChar() for c in [0..cols-1]).join('')
-        return JSON.stringify
-            puzzle: (rowGen r, width for r in [0..height-1])
+        rowGen = (rowIndex, cols) -> (randomChar() for _ in [0..cols-1]).join('')
+        @load JSON.stringify
+            puzzle: (rowGen r, @width for r in [0..@height-1])
+    blank: ->
+        console.log 'generating blank...'
+        @load JSON.stringify
+            puzzle: ((' ' for _ in [0..@width-1]).join('') for _ in [0..@height-1])
+
 
 class Cell
     constructor: (@char, @num) ->
@@ -101,8 +110,6 @@ cryptical.controller 'CluesCtrl', ['$scope',
 
 cryptical.controller 'ButtonsCtrl', ['$scope',
     ($scope) ->
-        $scope.load_random = ->
-            $scope.crossword.load $scope.crossword.random()
         $scope.load_local = ->
             $scope.crossword.load localStorage['crossword']
         $scope.save_local = ->

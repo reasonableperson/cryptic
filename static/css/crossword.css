@@ -49,3 +49,7 @@ h1 {
 #rightcol .buttons {
   text-align: center;
 }
+#rightcol .buttons .dimensions input {
+  margin: 1em 0.5em;
+  width: 2em;
+}
