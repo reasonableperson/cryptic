@@ -40,15 +40,16 @@ class Crossword
         @load crosswordString
     load: (crosswordString) ->
         console.log 'loading from this JSON:', crosswordString
-        array = JSON.parse(crosswordString)
-        @cells = ((new Cell char for char in row) for row in array.puzzle)
-        @clues = array.clues or analyseGrid(@)
-        @title = 'loaded'
-        @author = 'unsure'
-        console.log '@cells', @cells, @cells[0].length
+        newCrossword = angular.fromJson(crosswordString)
+        @cells = ((new Cell char for char in row) for row in newCrossword.puzzle)
+        # number grid, obtain empty clue dict
+        @clues = analyseGrid @
+        # but if we got clues, then replace the empty dict with those
+        if newCrossword.clues? then @clues = newCrossword.clues 
+        @title = newCrossword.title or '(untitled)'
+        @author = newCrossword.author or '(anonymous)'
         @width = @cells[0].length
         @height = @cells.length
-        analyseGrid @
     toggleCells = false
     serialise: ->
         stringify_cell = (cell) ->
@@ -60,17 +61,19 @@ class Crossword
         return angular.toJson
             puzzle: puzzle
             clues: @clues
+            title: @title
+            author: @author
     random: ->
         console.log 'generating random...'
         randomChar = ->
             validChars = '@ABCD'
             validChars[Math.floor( Math.random()*validChars.length )]
         rowGen = (rowIndex, cols) -> (randomChar() for _ in [0..cols-1]).join('')
-        @load JSON.stringify
+        @load angular.toJson
             puzzle: (rowGen r, @width for r in [0..@height-1])
     blank: ->
         console.log 'generating blank...'
-        @load JSON.stringify
+        @load angular.toJson
             puzzle: ((' ' for _ in [0..@width-1]).join('') for _ in [0..@height-1])
 
 
@@ -92,7 +95,14 @@ class Cell
 # Crossword object. So initialisation code can be found inside
 # Crossword's constructor...
 cryptical = angular.module 'cryptical', []
-# cryptical.value 'crossword', new Crossword()
+
+# Used to sort a hash of clues by their keys; AngularJS's orderBy
+# filter won't do this automatically.
+# See: http://stackoverflow.com/a/18186947/1402935
+cryptical.filter 'sortObjectKeys', -> (input) ->
+    value.num = key for key, value of input
+    array = (value for key, value of input)
+    array.sort (a, b) -> parseInt(a.num) - parseInt(b.num)
 
 cryptical.controller 'CrosswordCtrl', ['$scope',
     ($scope) ->
@@ -116,4 +126,6 @@ cryptical.controller 'ButtonsCtrl', ['$scope',
             data = $scope.crossword.serialise()
             console.log 'saving this locally:', data
             localStorage['crossword'] = data
+        $scope.refreshClues = ->
+            $scope.crossword.clues = analyseGrid($scope.crossword)
 ]

@@ -1,5 +1,7 @@
-h1.title {{crossword.title}}
-h2.author {{crossword.author}}
+h2 Title 
+    input.title(ng-model="crossword.title")
+h3 Author 
+    input.author(ng-model="crossword.author")
 table
     tbody
         tr(ng-repeat="row in crossword.cells")

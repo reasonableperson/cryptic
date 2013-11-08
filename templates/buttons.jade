@@ -9,6 +9,7 @@
         ng-click="crossword.toggleCells = !crossword.toggleCells",
         ng-class="(crossword.toggleCells) ? 'pure-button-active' : ''"
         ) Toggle black cells
+    button.pure-button(ng-click="refreshClues()") Refresh clues
     
     h4 New puzzle
     button.pure-button(ng-click="load(crossword.blank())") Empty crossword
