@@ -1,10 +1,1 @@
-[
-    "ABC@@ @ @",
-    "@        ",
-    "@   @ @ @",
-    "    @    ",
-    "   @@ @@@",
-    " @ @     ",
-    "   @@   @",
-    "@       @"
-]
+{"puzzle":["BACCADBCDC","DCAABBB@AC","ADAD@@AAAC","CDDCDC@AAC","DCCDDACADA","D@D@CCDACB","BBCCCABCCD","CAADDDC@@D","AABBC@BBAB","BACD@BC@CA"],"clues":{"across":{"1":{"length":10},"10":{"length":7},"11":{"length":2},"12":{"length":4},"13":{"length":4},"15":{"length":6},"18":{"length":3},"19":{"length":10},"21":{"length":6},"22":{"length":10},"25":{"length":7},"26":{"length":5},"27":{"length":4},"29":{"length":4},"30":{"length":2},"31":{"length":2}},"down":{"1":{"length":10},"2":{"length":5},"3":{"length":10},"4":{"length":5},"5":{"length":2},"6":{"length":2},"7":{"length":3},"8":{"length":7},"9":{"length":10,"content":"something"},"14":{"length":5},"16":{"length":6},"17":{"length":5},"20":{"length":6},"23":{"length":4},"24":{"length":4},"28":{"length":2,"content":"aergaerhaerhaethar"}}}}

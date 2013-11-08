@@ -9,9 +9,9 @@ block leftcol
     table
         tbody
             tr(ng-repeat="row in crossword.cells")
-                td(ng-repeat="cell in row", ng-class="cell.class", ng-click="!cryptical.toggleCells || cell.toggle()")
+                td(ng-repeat="cell in row", ng-class="cell.class", ng-click="!crossword.toggleCells || cell.toggle()")
                     span.num(ng-if="cell.num") {{cell.num}}
-                    input(ng-model="cell.char" oneCharOnly)
+                    input(ng-model="cell.char", oneCharOnly, ng-change="cell.clean()")
 
 block rightcol
     .clues
@@ -27,10 +27,10 @@ block rightcol
     .buttons(ng-controller="ButtonsCtrl")
         h4 Load data
         button(ng-click="load_random()").pure-button Random grid
-        // button(ng-click="load('/sample.json')").pure-button AJAX sample.json
+        // button(ng-click="load_url('/sample.json')").pure-button AJAX sample.json
         button(ng-click="load_local()").pure-button Local storage
         h4 Save data
         button(ng-click="save()").pure-button AJAX
         button(ng-click="save_local()").pure-button Local storage
         h4 Edit puzzle
-        button(ng-click="cryptical.toggleCells = !cryptical.toggleCells", ng-class="(cryptical.toggleCells) ? 'pure-button-active' : ''").pure-button Toggle black cells
+        button(ng-click="crossword.toggleCells = !crossword.toggleCells", ng-class="(crossword.toggleCells) ? 'pure-button-active' : ''").pure-button Toggle black cells

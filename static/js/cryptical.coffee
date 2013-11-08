@@ -41,22 +41,17 @@ class Crossword
         console.log 'loading from this JSON:', crosswordString
         array = JSON.parse(crosswordString)
         @cells = ((new Cell char for char in row) for row in array.puzzle)
-
-        console.log 'clues:', array.clues
         @clues = array.clues
-        #@clues = angular.copy array.clues, @clues
-        console.log 'clues loaded:', @clues, @
-
         @title = 'loaded'
         @author = 'unsure'
         analyseGrid @
     toggleCells = false
     serialise: ->
-        stringify_char = (char) ->
-            if char == '' then return '@'
-            else return char
+        stringify_cell = (cell) ->
+            if cell.char == '' or cell.class == 'black' then return '@'
+            else return cell.char
         stringify_row = (row) ->
-            (stringify_char(cell.char) for cell in row).join('')
+            (stringify_cell(cell) for cell in row).join('')
         puzzle = (stringify_row(row) for row in @cells)
         return angular.toJson
             puzzle: puzzle
@@ -72,12 +67,17 @@ class Crossword
 
 class Cell
     constructor: (@char, @num) ->
+        @char = @char.toUpperCase()
         if @char is '@'
             @char = ''
             @class = 'black'
+    clean: ->
+        # Called whenever the cell is changed.
+        @char = @char.slice(-1).toUpperCase()
     toggle: ->
-            if @class is 'black' then @class = ''
-            else @class = 'black'
+        console.warn 'Puzzle layout changed, may need renumbering.'
+        if @class is 'black' then @class = ''
+        else @class = 'black'
 
 # Here we initiate the Angular module by constructing a
 # Crossword object. So initialisation code can be found inside
