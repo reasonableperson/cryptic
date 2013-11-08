@@ -1,36 +1,8 @@
-extends 2col
-
-block title
-    h1 cryptical
-
-block leftcol
-    h1.title {{crossword.title}}
-    h2.author {{crossword.author}}
-    table
-        tbody
-            tr(ng-repeat="row in crossword.cells")
-                td(ng-repeat="cell in row", ng-class="cell.class", ng-click="!crossword.toggleCells || cell.toggle()")
-                    span.num(ng-if="cell.num") {{cell.num}}
-                    input(ng-model="cell.char", oneCharOnly, ng-change="cell.clean()")
-
-block rightcol
-    .clues
-        h4 Clues
-        .pure-g-r
-            .pure-u-1-2(ng-repeat="(direction, list) in crossword.clues", ng-class="direction")
-                h5 {{direction}}
-                ol
-                    //li(ng-repeat="(num, clue) in list | orderBy:null", value="{{num}}")
-                    li(ng-repeat="(num, clue) in list", value="{{num}}")
-                        input(ng-model="clue.content")
-                        span.length  ({{clue.length}})
-    .buttons(ng-controller="ButtonsCtrl")
-        h4 Load data
-        button(ng-click="load_random()").pure-button Random grid
-        // button(ng-click="load_url('/sample.json')").pure-button AJAX sample.json
-        button(ng-click="load_local()").pure-button Local storage
-        h4 Save data
-        button(ng-click="save()").pure-button AJAX
-        button(ng-click="save_local()").pure-button Local storage
-        h4 Edit puzzle
-        button(ng-click="crossword.toggleCells = !crossword.toggleCells", ng-class="(crossword.toggleCells) ? 'pure-button-active' : ''").pure-button Toggle black cells
+h1.title {{crossword.title}}
+h2.author {{crossword.author}}
+table
+    tbody
+        tr(ng-repeat="row in crossword.cells")
+            td(ng-repeat="cell in row", ng-class="cell.class", ng-click="!crossword.toggleCells || cell.toggle()")
+                span.num(ng-if="cell.num") {{cell.num}}
+                input(ng-model="cell.char", oneCharOnly, ng-change="cell.clean()")

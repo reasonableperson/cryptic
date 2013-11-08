@@ -1,0 +1,10 @@
+.clues
+    h4 Clues
+    .pure-g-r
+        .pure-u-1-2(ng-repeat="(direction, list) in crossword.clues", ng-class="direction")
+            h5 {{direction}}
+            ol
+                //li(ng-repeat="(num, clue) in list | orderBy:null", value="{{num}}")
+                li(ng-repeat="(num, clue) in list", value="{{num}}")
+                    input(ng-model="clue.content")
+                    span.length  ({{clue.length}})

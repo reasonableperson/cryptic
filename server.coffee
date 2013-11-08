@@ -30,4 +30,4 @@ console.log 'Express server listening on port ' + PORT + '.'
 
 # views
 app.get '/', (req, res) ->
-    res.render 'puzzle.jade'
+    res.render '2col.jade'
