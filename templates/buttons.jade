@@ -7,8 +7,9 @@
     h4 Edit puzzle
     button.pure-button(
         ng-click="crossword.toggleCells = !crossword.toggleCells",
-        ng-class="(crossword.toggleCells) ? 'pure-button-active' : ''"
-        ) Toggle black cells
+        ng-class="(crossword.toggleCells) ? 'pure-button-active' : ''")
+        i.fa.fa-square
+        |  Toggle black cells
     button.pure-button(ng-click="refreshClues()") Refresh clues
     
     h4 New puzzle
