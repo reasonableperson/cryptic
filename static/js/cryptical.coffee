@@ -34,10 +34,14 @@ analyseGrid = (crossword) ->
     return clues
 
 class Crossword
-    constructor: -> 
-        # look in local storage if no string provided
-        if not crosswordString? then crosswordString = localStorage['crossword']
-        @load crosswordString
+    constructor: (@crosswordString, @width, @height) ->
+        if crosswordString?                 # explicitly constructed
+            @load crosswordString
+        else if localStorage['crossword']?  # try local storage
+            @load localStorage['crossword']
+        else                                # generate empty
+            @width = 10; @height = 10; @blank()
+        
     load: (crosswordString) ->
         console.log 'loading from this JSON:', crosswordString
         newCrossword = angular.fromJson(crosswordString)
@@ -51,6 +55,7 @@ class Crossword
         @width = @cells[0].length
         @height = @cells.length
     toggleCells = false
+    editable = 'clues'
     serialise: ->
         stringify_cell = (cell) ->
             if cell.char == '' or cell.class == 'black' then return '@'

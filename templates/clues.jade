@@ -4,6 +4,7 @@
         .pure-u-1-2(ng-repeat="(direction, list) in crossword.clues", ng-class="direction")
             h5 {{direction}}
             ol
-                li(ng-repeat="clue in list | sortObjectKeys", value="{{clue.num}}")
-                    input(ng-model="clue.content")
+                li(ng-repeat="clue in list | sortObjectKeys", value="{{clue.num}}", ng-switch, on="crossword.editable")
+                    input(ng-model="clue.content", ng-switch-when="clues")
+                    span.clue(ng-model="clue.content", ng-switch-default) {{clue.content}}
                     span.length  ({{clue.length}})
