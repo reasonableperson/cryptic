@@ -31,8 +31,11 @@ app.use connect.logger()
 
 ### VIEWS ###
 
-# home page
 app.get '/', (req, res) ->
+    res.render 'home.jade'
+
+# home page
+app.get '/old', (req, res) ->
     res.render '2col.jade'
 
 # API: list all puzzles in the database

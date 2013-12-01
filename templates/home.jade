@@ -1,0 +1,11 @@
+extends base
+
+block content
+    h1 cryptical
+    p Solve or create crosswords!
+
+    #loader(ng-controller="CrosswordLoader")
+        | Choose a crossword:
+        select
+            option(value="") (none)
+            option(ng-repeat="cw in crosswords") {{cw}}

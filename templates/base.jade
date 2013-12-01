@@ -13,7 +13,12 @@ html.no-js
         meta(http-equiv='X-UA-Compatible', content='IE=edge,chrome=1')
         title cryptical
         meta(name='viewport', content='width=device-width')
+
+        link(rel='stylesheet', href='css/crossword.css')
+        link(rel='stylesheet', href='css/pure-min.css')
+        link(rel='stylesheet', href='css/font-awesome.css')
         block head_includes
+
     body
         //if lt IE 7
             p.chromeframe
@@ -26,3 +31,5 @@ html.no-js
         div.container-fluid(ng-app='cryptical')
             block content
         block scripts
+            script(src="js/lib/angular.min.js")
+            script(src="js/cryptical.js")

@@ -81,7 +81,6 @@ class Crossword
         @load angular.toJson
             puzzle: ((' ' for _ in [0..@width-1]).join('') for _ in [0..@height-1])
 
-
 class Cell
     constructor: (@char, @num) ->
         @char = @char.toUpperCase()
@@ -116,6 +115,11 @@ cryptical.controller 'CrosswordCtrl', ['$scope',
             console.log char
             str = 'f'
             @value = str.toUpperCase()
+]
+
+cryptical.controller 'CrosswordLoader', ['$scope', 
+    ($scope) ->
+        $scope.json = localStorage['crossword']
 ]
 
 cryptical.controller 'CluesCtrl', ['$scope',
