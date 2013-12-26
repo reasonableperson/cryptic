@@ -32,3 +32,43 @@ Crossword
  *  Creators want to save complete Grid, Clues and Solutions.
  *  Each Creation can have unlimited Attempts. At first, they should probably
     just be saved in local storage.
+
+# API data types
+ *  Puzzle {
+        Grid: [     // a list of uniform-length strings
+            "@ @",  // representing the crossword's rows.
+            " @ "   // space is a white square and @ is black.
+        ]           
+        Clues: {
+            Across: { [
+                n: {
+                    length: int
+                    text: string
+                }
+            ] }
+            Down: { [
+                // as above
+            ] }
+        }
+        Meta: {
+            Id:        string // hash of the key in the back end,
+                              // or a magic ID for unsaved local puzzles
+            (Title:    string) 
+            (Author:   string)
+            (Date:     string)
+        }
+    }
+ *  Attempt {
+        Grid: [     // spaces from a Puzzle.Grid can be 
+            "@A@",  // replaced by guessed letters.
+            "B@C"
+        ]
+        Meta: {
+            Id:     string
+        }
+    }
+
+# API methods
+ *  ListPuzzles :: -> [ Puzzle ]
+ *  CreatePuzzle :: Grid, Clues, Meta -> Id
+ *  UpdatePuzzle :: Id, (Grid), (Clues), (Meta) ->

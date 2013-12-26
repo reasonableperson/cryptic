@@ -37,8 +37,8 @@ class Crossword
     constructor: (@crosswordString, @width, @height) ->
         if crosswordString?                 # explicitly constructed
             @load crosswordString
-        else if localStorage['crossword']?  # try local storage
-            @load localStorage['crossword']
+        else if localStorage['cryptical']?  # try local storage
+            @load localStorage['cryptical']
         else                                # generate empty
             @width = 10; @height = 10; @blank()
         
@@ -119,7 +119,8 @@ cryptical.controller 'CrosswordCtrl', ['$scope',
 
 cryptical.controller 'CrosswordLoader', ['$scope', 
     ($scope) ->
-        $scope.json = localStorage['crossword']
+        $scope.puzzles = localStorage['cryptical']
+        console.log 'puzzles:', $scope.puzzles
 ]
 
 cryptical.controller 'CluesCtrl', ['$scope',
@@ -130,11 +131,11 @@ cryptical.controller 'CluesCtrl', ['$scope',
 cryptical.controller 'ButtonsCtrl', ['$scope',
     ($scope) ->
         $scope.load_local = ->
-            $scope.crossword.load localStorage['crossword']
+            $scope.crossword.load localStorage['cryptical']
         $scope.save_local = ->
             data = $scope.crossword.serialise()
             console.log 'saving this locally:', data
-            localStorage['crossword'] = data
+            localStorage['cryptical'] = data
         $scope.refreshClues = ->
             $scope.crossword.clues = analyseGrid($scope.crossword)
 ]
